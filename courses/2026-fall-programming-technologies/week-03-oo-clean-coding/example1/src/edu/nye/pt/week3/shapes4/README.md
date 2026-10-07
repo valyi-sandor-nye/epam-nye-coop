@@ -1,0 +1,1 @@
+Example of keeping the SOLID principles in mind while designing classes and interfaces in Java.
