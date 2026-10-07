@@ -13,7 +13,7 @@ public class BufferedReaderMapReader implements MapReaderInterface {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BufferedReaderMapReader.class);
 
-    BufferedReader bufferedReader;
+    private final BufferedReader bufferedReader;
 
     public BufferedReaderMapReader(BufferedReader bufferedReader) {
         this.bufferedReader = bufferedReader;
