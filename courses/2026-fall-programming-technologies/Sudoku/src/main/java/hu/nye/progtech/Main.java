@@ -2,10 +2,12 @@ package hu.nye.progtech;
 
 import hu.nye.progtech.model.MapVO;
 import hu.nye.progtech.service.exceptions.MapReaderException;
+import hu.nye.progtech.service.exceptions.MapValidationException;
 import hu.nye.progtech.service.map.parser.MapParser;
 import hu.nye.progtech.service.map.reader.BufferedReaderMapReader;
 import hu.nye.progtech.service.map.reader.MapReaderInterface;
 import hu.nye.progtech.service.map.reader.ScannerMapReader;
+import hu.nye.progtech.service.map.validation.RowValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,9 +46,11 @@ public class Main {
 
             MapVO mapVO2 = mapParser.parseMap(rawMap2nd);
 
-            System.out.println(mapVO1.equals(mapVO2));
+            System.out.println("A táblák megegyeznek: " + mapVO1.equals(mapVO2));
 
-        } catch(MapReaderException e) {
+            new RowValidator().validate(mapVO1);
+
+        } catch(MapReaderException | MapValidationException e) {
             System.out.println(e.getMessage());
             LOGGER.warn(e.getMessage());
         } catch (Exception e) {
