@@ -1,0 +1,1 @@
+Example of encapsulation, inheritance, and polymorphism in Java.

@@ -1,0 +1,45 @@
+@startuml
+abstract class AbstractShape {
++ {abstract}double getArea()
++ {abstract}double getPerimeter()
++ String getShapeInfo()
+}
+
+abstract class AbstractPoligon {
+# double getSide(Point,Point)
+}
+
+AbstractShape <|-- AbstractPoligon
+
+class Triangle {
+- Point a
+- Point b
+- Point c
++ double getArea()
++ double getPerimeter()
+}
+
+AbstractPoligon <|-- Triangle
+
+class Rectangle {
+- Point a
+- Point b
+- Point c
+- Point d
++ double getArea()
++ double getPerimeter()
+- double getWidth()
+- double getHeight()
+}
+
+AbstractPoligon <|-- Rectangle
+
+class Circle {
+- Point center
+- double radius
++ double getArea()
++ double getPerimeter()
+}
+
+AbstractShape <|-- Circle
+@enduml
