@@ -1,5 +1,6 @@
 package hu.nye.progtech;
 
+import hu.nye.progtech.config.GameConfig;
 import hu.nye.progtech.model.MapVO;
 import hu.nye.progtech.service.exceptions.MapReaderException;
 import hu.nye.progtech.service.exceptions.MapValidationException;
@@ -24,25 +25,32 @@ public class Main {
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
-        InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("map/beginner.txt");
-//        InputStream inputStream = System.in;
+        GameConfig config = GameConfig.getInstance();
+        InputStream inputStream = Main.class.getClassLoader()
+                .getResourceAsStream(config.getBeginnerMapPath());
+
         MapReaderInterface mapReader = getMapReaderInterface(inputStream);
         LOGGER.debug("Debug: Beginner Map");
         LOGGER.info("Beginner Map");
-        InputStream inputStream2nd = Main.class.getClassLoader().getResourceAsStream("map/first_step.txt");
+        InputStream inputStream2nd = Main.class.getClassLoader().getResourceAsStream(config.getFirstMapPath());
         BufferedReader bufferedReader2nd = new BufferedReader(new InputStreamReader(inputStream2nd));
         MapReaderInterface mapReader2nd = new BufferedReaderMapReader(bufferedReader2nd);
         LOGGER.info("First Step Map");
         try {
-            int numberOfRows = 9;
-            int numberOfColumns = 9;
-
             List<String> rawMap = mapReader.readMap();
             List<String> rawMap2nd = mapReader2nd.readMap();
 
-            MapParser mapParser = new MapParser(numberOfRows, numberOfColumns);
+            MapParser mapParser = new MapParser(config.getNumberOfRows(), config.getNumberOfColumns());
 
             MapVO mapVO1 = mapParser.parseMap(rawMap);
+
+            System.out.println("Elotte: " + mapVO1.getMap()[0][0]);
+            mapVO1.getMap()[0][0] = 7;
+            System.out.println("Utanna: " + mapVO1.getMap()[0][0]);
+
+            MapVO ujTabla = mapVO1.withValue(0, 1, 7);
+            System.out.println("ujTabla: " + ujTabla.getMap()[0][1]);
+
 
             MapVO mapVO2 = mapParser.parseMap(rawMap2nd);
 

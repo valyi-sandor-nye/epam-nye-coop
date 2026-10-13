@@ -61,6 +61,11 @@ public class MapParser {
         int[][] map = getMap(rawMap);
         boolean[][] fixed = getFixed(map);
 
-        return new MapVO(numberOfRows, numberOfColumns, map, fixed);
+        return new MapVO.Builder()
+                .withNumberOfRows(numberOfRows)
+                .withNumberOfColumns(numberOfColumns)
+                .withMap(map)
+                .withFixed(fixed)
+                .build();
     }
 }

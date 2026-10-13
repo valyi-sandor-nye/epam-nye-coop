@@ -3,17 +3,17 @@ package hu.nye.progtech.model;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class MapVO {
-    private int numberOfRows;
-    private int numberOfColumns;
-    private int[][] map;
-    private boolean[][] fixed;
+public final class MapVO {
+    private final int numberOfRows;
+    private final int numberOfColumns;
+    private final int[][] map;
+    private final boolean[][] fixed;
 
-    public MapVO(int numberOfRows, int numberOfColumns, int[][] map, boolean[][] fixed) {
-        this.numberOfRows = numberOfRows;
-        this.numberOfColumns = numberOfColumns;
-        this.map = deepCopy(map);
-        this.fixed = deepCopy(fixed);
+    private MapVO(Builder builder) {
+        this.numberOfRows = builder.numberOfRows;
+        this.numberOfColumns = builder.numberOfColumns;
+        this.map = deepCopy(builder.map);
+        this.fixed = deepCopy(builder.fixed);
     }
 
     public int getNumberOfRows() {
@@ -25,11 +25,11 @@ public class MapVO {
     }
 
     public int[][] getMap() {
-        return map;
+        return deepCopy(map);
     }
 
     public boolean[][] getFixed() {
-        return fixed;
+        return deepCopy(fixed);
     }
 
     private int[][] deepCopy(int[][] map) {
@@ -82,5 +82,75 @@ public class MapVO {
         result += Arrays.deepHashCode(fixed);
 
         return result;
+    }
+
+    public MapVO withValue(int row, int column, int value) {
+        int[][] newMap = deepCopy(map);
+        newMap[row][column] = value;
+
+        return builder()
+                .withNumberOfRows(numberOfRows)
+                .withNumberOfColumns(numberOfColumns)
+                .withMap(newMap)
+                .withFixed(fixed)
+                .build();
+    }
+
+    public int getValue(int row, int column){
+        return map[row][column];
+    }
+
+    public boolean getFixed(int row, int column){
+        return fixed[row][column];
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+
+        private int numberOfRows;
+        private int numberOfColumns;
+        private int[][] map;
+        private boolean[][] fixed;
+
+        public Builder withNumberOfRows(int numberOfRows) {
+            this.numberOfRows = numberOfRows;
+            return this;
+        }
+
+        public Builder withNumberOfColumns(int numberOfColumns) {
+            this.numberOfColumns = numberOfColumns;
+            return this;
+        }
+
+        public Builder withMap(int[][] map) {
+            this.map = map;
+            return this;
+        }
+
+        public Builder withFixed(boolean[][] fixed) {
+            this.fixed = fixed;
+            return this;
+        }
+
+        public MapVO build() {
+            if (numberOfRows <= 0 || numberOfColumns <= 0 ){
+                throw new IllegalStateException("A tabla nem lehet kisseb mint nulla.");
+            }
+
+            if (map == null || fixed == null){
+                throw new IllegalStateException("A map es a fixed nem lehet null.");
+            }
+
+            if (map.length != numberOfRows || fixed.length != numberOfRows)
+            {
+                throw new IllegalStateException("A tomb merete nem egyezi a megadott sorszammal.");
+            }
+
+            return new MapVO(this);
+        }
+
     }
 }
